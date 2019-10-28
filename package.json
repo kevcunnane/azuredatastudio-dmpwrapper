@@ -1,6 +1,6 @@
 {
   "name": "azuredatastudio-dmpwrapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A wrapper to simplify using Data Management Protocol APIs in Azure Data Studio",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "prepare": "npm run compile",
     "watch": "tsc -watch -p ./",
     "updateazdata": "curl -o ./typings/azdata.proposed.d.ts https://raw.githubusercontent.com/Microsoft/azuredatastudio/master/src/sql/azdata.proposed.d.ts",
-    "postinstall": "node ./node_modules/vscode/bin/install && node ./node_modules/azdata/bin/install"
+    "installtypings": "node ./node_modules/vscode/bin/install && node ./node_modules/azdata/bin/install"
   },
   "keywords": [
     "AzureDataStudio"
