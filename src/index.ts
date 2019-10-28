@@ -5,7 +5,7 @@
 
 'use strict';
 
-import * as sqlops from 'sqlops';
+import * as azdata from 'azdata';
 import { Deferred } from './promise';
 
 let counter = 0;
@@ -16,7 +16,7 @@ export interface IDisposable {
     dispose(): void;
 }
 
-function onConnectionCompleteHandler(summary: sqlops.ConnectionInfoSummary): void {
+function onConnectionCompleteHandler(summary: azdata.ConnectionInfoSummary): void {
     let trackedPromise = connectionTracker.get(summary.ownerUri);
     if (trackedPromise) {
         if (summary.connectionId) {
@@ -33,7 +33,7 @@ export class ConnectionContext implements IDisposable {
 
     private connected: boolean = false;
     private connectionUri: string;
-    constructor(private connectionProvider: sqlops.ConnectionProvider) {
+    constructor(private connectionProvider: azdata.ConnectionProvider) {
         if (this.connectionProvider && !connectionProviders.has(connectionProvider.providerId)) {
             this.connectionProvider.registerOnConnectionComplete(onConnectionCompleteHandler);
         }
@@ -41,7 +41,7 @@ export class ConnectionContext implements IDisposable {
 
     }
 
-    public async tryConnect(connection: sqlops.IConnectionProfile | sqlops.connection.Connection): Promise<boolean> {
+    public async tryConnect(connection: azdata.IConnectionProfile | azdata.connection.Connection): Promise<boolean> {
         try {
             let deferred = new Deferred<void>();
             connectionTracker.set(this.connectionUri, deferred);
@@ -68,11 +68,11 @@ export class ConnectionContext implements IDisposable {
      * The query must be a single resultset response 
      * @param query 
      */
-    public async runQueryAndReturn(query: string): Promise<sqlops.SimpleExecuteResult> {
+    public async runQueryAndReturn(query: string): Promise<azdata.SimpleExecuteResult> {
         if (!this.connected) {
             throw new Error('Connection must be created before running queries');
         }
-        let queryProvider = sqlops.dataprotocol.getProvider<sqlops.QueryProvider>(this.connectionProvider.providerId, sqlops.DataProviderType.QueryProvider);
+        let queryProvider = azdata.dataprotocol.getProvider<azdata.QueryProvider>(this.connectionProvider.providerId, azdata.DataProviderType.QueryProvider);
         let result = await queryProvider.runQueryAndReturn(this.connectionUri, query);
         return result;
     }

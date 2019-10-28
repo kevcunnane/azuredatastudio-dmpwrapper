@@ -5,7 +5,7 @@ A wrapper to simplify using Data Management Protocol APIs in Azure Data Studio.
 ## Usage
 ```ts
 // Create a Connection context to simplify connecting via the Data Management Protocol
-let connectionProvider = sqlops.dataprotocol.getProvider<sqlops.ConnectionProvider>('MSSQL', sqlops.DataProviderType.ConnectionProvider);
+let connectionProvider = azdata.dataprotocol.getProvider<azdata.ConnectionProvider>('MSSQL', azdata.DataProviderType.ConnectionProvider);
 let connectionContext = new ConnectionContext(connectionProvider);
 
 // Connect once
@@ -15,7 +15,7 @@ if (!connected) {
 }
 
 // Run queries
-let result: sqlops.SimpleExecuteResult = await connectionContext.runQueryAndReturn('select 1 as MyColumn');
+let result: azdata.SimpleExecuteResult = await connectionContext.runQueryAndReturn('select 1 as MyColumn');
 if (result.columnInfo[0].columnName !== 'MyColumn') {
     throw new Error('Query did not work');
 } else {
